@@ -39,5 +39,6 @@ interface Game {
   twitchName?: string;
 }
 
-// For an array of these objects
-type Games = Game[];
+type Games = {
+  [id: string]: Game;
+};
