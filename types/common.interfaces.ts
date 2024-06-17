@@ -21,7 +21,7 @@ interface Store {
   url: string;
 }
 
-interface Game {
+interface RAWGGame {
   comments: string;
   genres: Genre[];
   id: number;
@@ -39,6 +39,6 @@ interface Game {
   twitchName?: string;
 }
 
-type Games = {
-  [id: string]: Game;
+type RAWGGameList = {
+  [id: string]: RAWGGame;
 };
