@@ -5,7 +5,7 @@ export default eventHandler(async (event) => {
   console.log("search game");
   const config = useRuntimeConfig();
   const IGDBClientId = config.IGDBClientId;
-  const query = getRouterParam(event, "query");
+  const query = decodeURIComponent(getRouterParam(event, "query"));
   const token = await getToken();
   console.log("query", query, "token", token);
 
@@ -28,7 +28,7 @@ export default eventHandler(async (event) => {
       message: error.message,
     });
   });
-
+  console.log("search response", response);
   if (!response) {
     throw createError({
       statusCode: 500,
@@ -40,7 +40,7 @@ export default eventHandler(async (event) => {
   if (Array.isArray(response)) {
     if (response.length === 0) {
       throw createError({ statusCode: 404, message: "No game found" });
-    } else if (response.length > 1) {
+    } else if (response.length > 0) {
       const games = response.map((result) => new ClientGameResponse(result));
       return {
         statusCode: 200,
