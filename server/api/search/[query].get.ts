@@ -1,10 +1,12 @@
 import ClientGameResponse from "~/utils/gameState.class";
+import { getToken } from "~/services/tokenManager";
 
 export default eventHandler(async (event) => {
+  console.log("search game");
   const config = useRuntimeConfig();
   const IGDBClientId = config.IGDBClientId;
-  const token = getRequestHeader(event, "Authorization");
   const query = getRouterParam(event, "query");
+  const token = await getToken();
   console.log("query", query, "token", token);
 
   const response = await $fetch<Promise<SearchResponse>>(
@@ -14,7 +16,7 @@ export default eventHandler(async (event) => {
       headers: {
         Accept: "application/json",
         "Client-ID": IGDBClientId,
-        Authorization: `${token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: `fields slug, name, id, genres.name, first_release_date, screenshots.image_id, platforms.name; search "${query}";limit 50;where keywords != (2004, 1617, 24124) & category != (5,12);`,
     }
