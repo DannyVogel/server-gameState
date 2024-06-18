@@ -14,20 +14,23 @@ export default eventHandler(async (event) => {
     if (gameReleaseDate) date = new Date(gameReleaseDate).getTime() / 1000;
     else console.log("No release date for", gameTitle);
 
-    const response = await $fetch("https://api.igdb.com/v4/games", {
+    const response = await $fetch("https://api.igdb.com/v4/search", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Client-ID": IGDBClientId,
         Authorization: `${token}`,
       },
-      body: `fields name, first_release_date ; where name = "${gameTitle}" ${
-        date ? `& first_release_date = ${date}` : ""
+      body: `fields name, published_at ; search "${gameTitle}"; ${
+        date ? `where published_at = ${date};` : ""
       };`,
+    }).catch((error) => {
+      console.error("Error fetching game", gameTitle, error);
+      errorGames[gameTitle] = error;
     });
     console.log("response", response);
     if (!response) {
-      throw createError({ statusCode: 500, message: response.message });
+      throw createError({ statusCode: 500, message: "Something went wrong" });
     } else if (Array.isArray(response)) {
       if (response.length === 0) {
         console.log("No game found");
