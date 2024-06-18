@@ -1,3 +1,4 @@
+import { version } from "../../package.json";
 export default eventHandler(async (event) => {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -51,6 +52,7 @@ export default eventHandler(async (event) => {
 <body>
     <div class="container">
         <h1>The <i>game</i>State server!</h1>
+        <p>v${version}</p>
         <p>Click below to enjoy it via the dedicated web app</p>
         <div class="button">
             <a href="https://dv-gamestate.netlify.app/">Go to <i>game</i>State</a>
